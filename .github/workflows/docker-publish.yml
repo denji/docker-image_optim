@@ -1,0 +1,29 @@
+name: Publish to Docker Hub
+on:
+  push:
+    tags:        
+      - '**'
+    branches:
+      - 'main'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+#    - name: Build and push Docker image (:tag_ver)
+#      uses: docker/build-push-action@v2
+#      with:
+#        context: .
+#        push: true
+#        tags: docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/docker-image_optim:${GITHUB_REF#refs/*/}
+    - name: Build and push Docker image (:latest)
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/docker-image_optim:latest
